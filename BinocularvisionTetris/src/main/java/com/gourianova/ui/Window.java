@@ -37,6 +37,7 @@ public class Window extends JFrame implements Runnable {
         Timer timer=new Timer(1000, timeAdapter);
         timer.start();
         showFigure(1);
+
     }
 
     public void initBoxes() {
@@ -55,8 +56,11 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void addFigure(PlayFigure play) {
-        setPlay(play);
+       // setPlay(play);
+        System.out.println(play.getFigures().toString()+play.isLanded()+"hh\n");
+          if (play.isLanded()){System.out.println("hjhk");
 
+        }
 
 
     }
@@ -135,6 +139,9 @@ public class Window extends JFrame implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             play.moveFigure(0,1);
+            if (play.isLanded()){
+                play=new PlayFigure();
+            play.setBoxes(boxes);}
         }
     }
 

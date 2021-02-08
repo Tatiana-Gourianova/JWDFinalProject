@@ -5,13 +5,19 @@ import com.gourianova.model.Figures;
 import com.gourianova.ui.Box;
 import com.gourianova.ui.Config;
 
-
 public class PlayFigure {
         private Figures figures;
         private Coord coord;
         private Box[][] boxes;
+        private boolean isLaneded;
 
-public Figures getFigures(){
+        public boolean isLanded(){
+    return isLaneded;
+}
+public void setLanded(boolean quest){
+    this.isLaneded=quest;
+}
+    public Figures getFigures(){
     return figures;
 }
 public Coord getCoord(){
@@ -21,10 +27,9 @@ public void setBoxes(Box[][] boxes){
     this.boxes=boxes;
 }
         public PlayFigure() {
-
            figures= Figures.getRandom();
            coord=new Coord(Config.WIDTH/2,-figures.top.y);
-                }
+        }
 
         public void showFigure(Figures figures, Coord at, int color) {
             for (Coord dot : figures.dots) {
@@ -41,26 +46,25 @@ public void setBoxes(Box[][] boxes){
             if (left < 0) return false;
             int right = coord.x + sx + figures.bottom.x;
             if (right >= Config.WIDTH) return false;
-            int doun = coord.y + sy + figures.top.y;
-            if (doun < 0) return false;
+            int down = coord.y + sy + figures.top.y;
+            if (down < 0) {
+
+                return false;
+                 }
             int up = coord.y + sy + figures.bottom.y;
-            if (up >= Config.HEIGHT) return false;
+            if (up >= Config.HEIGHT) {
+                setLanded(true);
+                return false;
+            }
             return true;
         }
 
         public void moveFigure ( int sx, int sy){
             hideFigure ();
             if (canMoveFigure(sx, sy)) {
-                coord = coord.plus(sx, sy);
-            }
+                coord = coord.plus(sx, sy);}
             showFigure();
         }
-
-    public void movePlay ( int sx, int sy){
-        hideFigure ();
-        moveFigure(sx,sy);
-        showFigure();
-    }
 
         public void turnFigure () {
             Figures rotated = figures.turnRight();
@@ -76,11 +80,6 @@ public void setBoxes(Box[][] boxes){
             }
         }
 
-        public void addFigure () {
-            figures = Figures.getRandom();
-            coord = new Coord(1, 0);
-            showFigure();
-        }
 
         private void showFigure () {
             showFigure(figures, coord, 1);
@@ -89,8 +88,6 @@ public void setBoxes(Box[][] boxes){
         private void hideFigure () {
             showFigure(figures, coord, 0);
         }
-
-
     }
 
 
