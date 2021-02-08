@@ -9,13 +9,13 @@ public class PlayFigure {
         private Figures figures;
         private Coord coord;
         private Box[][] boxes;
-        private boolean isLaneded;
+        private boolean isLanded;
 
         public boolean isLanded(){
-    return isLaneded;
+    return isLanded;
 }
 public void setLanded(boolean quest){
-    this.isLaneded=quest;
+    this.isLanded=quest;
 }
     public Figures getFigures(){
     return figures;
@@ -48,12 +48,25 @@ public void setBoxes(Box[][] boxes){
             if (right >= Config.WIDTH) return false;
             int down = coord.y + sy + figures.top.y;
             if (down < 0) {
-
                 return false;
                  }
             int up = coord.y + sy + figures.bottom.y;
-            if (up >= Config.HEIGHT) {
+            if ((up >= Config.HEIGHT)||(boxes[coord.x+sx+1][coord.y+sy+1].getColor()==2)) {
+
                 setLanded(true);
+
+                for (int i=0;i< boxes.length;i++) {
+                   int count = 0;
+                   for (int j = 0; j < boxes[i].length; j++)
+                       if (boxes[i][j].getColor() == 2) {
+                           count++;
+                       }
+                   if (count==boxes[i].length) {
+
+                       for (int j = 0; j < boxes[i].length; j++)
+                       boxes[i][j].setColor(0);
+                   }
+                }
                 return false;
             }
             return true;

@@ -32,7 +32,7 @@ public class Window extends JFrame implements Runnable {
         addKeyListener(new KeyAdapter());
         play = new PlayFigure();
         play.setBoxes(boxes);
-        addFigure(play);
+
         TimeAdapter timeAdapter = new TimeAdapter();
         Timer timer=new Timer(1000, timeAdapter);
         timer.start();
@@ -56,15 +56,9 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void addFigure(PlayFigure play) {
-       // setPlay(play);
-        System.out.println(play.getFigures().toString()+play.isLanded()+"hh\n");
-          if (play.isLanded()){System.out.println("hjhk");
-
+     setPlay(play);
+    // showFigure(1);
         }
-
-
-    }
-
 
 
 
@@ -94,9 +88,7 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void run() {
-
         repaint();
-
     }
 
     class KeyAdapter implements KeyListener {
@@ -112,25 +104,21 @@ public class Window extends JFrame implements Runnable {
                     break;
                 case KeyEvent.VK_RIGHT:
                     movePlay(+1, 0);
-                    break;//coord=new Coord(coord.x+1,coord.y);break;
+                    break;
                 case KeyEvent.VK_DOWN:
                     movePlay(0, +1);
-                    break;//
+                    break;
                 case KeyEvent.VK_UP:
                     movePlay(0, -1);
-                    break;//
+                    break;
                 case KeyEvent.VK_SPACE:
                     play.turnFigure();
-                    //     figure.turnLeft();break;
-                    //     case KeyEvent.VK_3:figure.turnRight();break;
-            }
+              }
             showFigure(1);
         }
 
         public void keyReleased(KeyEvent e) {
-
         }
-
 
     }
 
@@ -141,7 +129,14 @@ public class Window extends JFrame implements Runnable {
             play.moveFigure(0,1);
             if (play.isLanded()){
                 play=new PlayFigure();
-            play.setBoxes(boxes);}
+                //for ()
+            play.setBoxes(boxes);
+               addFigure( play);
+               //showFigure(2);
+                for (int i=0;i< boxes.length;i++)
+                    for (int j=0;j< boxes[i].length;j++)
+                        if (boxes[i][j].getColor()!=0) boxes[i][j].setColor(2);
+            }
         }
     }
 
