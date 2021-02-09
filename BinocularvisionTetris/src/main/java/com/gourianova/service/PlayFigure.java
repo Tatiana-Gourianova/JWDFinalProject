@@ -2,6 +2,7 @@ package com.gourianova.service;
 
 import com.gourianova.model.Coord;
 import com.gourianova.model.Figures;
+
 import com.gourianova.ui.Box;
 import com.gourianova.ui.Config;
 
@@ -26,12 +27,13 @@ public Coord getCoord(){
 public void setBoxes(Box[][] boxes){
     this.boxes=boxes;
 }
-        public PlayFigure() {
-           figures= Figures.getRandom();
-           coord=new Coord(Config.WIDTH/2,-figures.top.y);
-        }
+    public PlayFigure () {
+        figures= Figures.getRandom();
+        coord=new Coord(Config.WIDTH/2,-figures.top.y);
+    }
 
-        public void showFigure(Figures figures, Coord at, int color) {
+
+    public void showFigure(Figures figures, Coord at, int color) {
             for (Coord dot : figures.dots) {
                 setBoxColor(at.x + dot.x, at.y + dot.y, color);
             }
@@ -51,24 +53,19 @@ public void setBoxes(Box[][] boxes){
                 return false;
                  }
             int up = coord.y + sy + figures.bottom.y;
-            if ((up >= Config.HEIGHT)||(boxes[coord.x+sx+1][coord.y+sy+1].getColor()==2)) {
 
+            if ((up >= Config.HEIGHT)||(boxes[coord.x+sx+1][coord.y+sy+1].getColor()==2))
+            {
                 setLanded(true);
 
-                for (int i=0;i< boxes.length;i++) {
-                   int count = 0;
-                   for (int j = 0; j < boxes[i].length; j++)
-                       if (boxes[i][j].getColor() == 2) {
-                           count++;
-                       }
-                   if (count==boxes[i].length) {
-
-                       for (int j = 0; j < boxes[i].length; j++)
-                       boxes[i][j].setColor(0);
-                   }
-                }
                 return false;
             }
+
+            for (Coord dot: figures.dots)
+                if (boxes[coord.x+dot.x+sx][coord.y+dot.y+sy].getColor()!=0){
+                    setLanded(true);
+                    return false;}
+
             return true;
         }
 
@@ -101,7 +98,9 @@ public void setBoxes(Box[][] boxes){
         private void hideFigure () {
             showFigure(figures, coord, 0);
         }
-    }
+
+
+}
 
 
 

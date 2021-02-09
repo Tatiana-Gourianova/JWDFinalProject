@@ -1,26 +1,27 @@
 package com.gourianova.ui;
 
-import javax.swing.*;
-
 import com.gourianova.model.Coord;
-import com.gourianova.service.*;
+import com.gourianova.service.PlayFigure;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 
-
 public class Window extends JFrame implements Runnable {
-    private Box[][] boxes;
+    private final Box[][] boxes;
     private PlayFigure play;
+
     public PlayFigure getPlay() {
         return play;
     }
+
     public void setPlay(PlayFigure play) {
-        this.play=play;
+        this.play = play;
     }
+
     public Box[][] getBoxes() {
         return boxes;
     }
@@ -34,11 +35,12 @@ public class Window extends JFrame implements Runnable {
         play.setBoxes(boxes);
 
         TimeAdapter timeAdapter = new TimeAdapter();
-        Timer timer=new Timer(1000, timeAdapter);
+        Timer timer = new Timer(1000, timeAdapter);
         timer.start();
         showFigure(1);
 
     }
+
 
     public void initBoxes() {
         for (int x = 0; x < Config.WIDTH; x++) {
@@ -56,14 +58,12 @@ public class Window extends JFrame implements Runnable {
     }
 
     public void addFigure(PlayFigure play) {
-     setPlay(play);
-    // showFigure(1);
-        }
+        setPlay(play);
 
+    }
 
 
     public void initForm() {
-
         setSize(Config.WIDTH * Config.HEIGHT + Config.SIZE, Config.HEIGHT * Config.HEIGHT + Config.HEIGHT + Config.WIDTH);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -72,11 +72,13 @@ public class Window extends JFrame implements Runnable {
         setVisible(true);
 
     }
-    public void movePlay ( int sx, int sy){
-        hideFigure ();
-        play.moveFigure(sx,sy);
+
+    public void movePlay(int sx, int sy) {
+        hideFigure();
+        play.moveFigure(sx, sy);
         showFigure(1);
     }
+
     public void showFigure(int color) {
         for (Coord dots : play.getFigures().dots) {
             setBoxColor(play.getCoord().x + dots.x, play.getCoord().y + dots.y, color);
@@ -91,6 +93,39 @@ public class Window extends JFrame implements Runnable {
         repaint();
     }
 
+    private void stripLines() {
+        for (int y = Config.HEIGHT - 1; y >= 0; y--) {
+            while (isFullLine(y)) {
+                dropLine(y);
+            }
+        }
+    }
+
+    private void dropLine(int y) {
+        for (int my = y - 1; my > 0; my--) {
+            for (int x = 0; x < Config.WIDTH; x++) {
+                setBoxColor(x, my + 1, getBoxColor(x, my));
+            }
+        }
+        for (int x = 0; x < Config.WIDTH; x++) {
+            setBoxColor(x, 0, 0);
+        }
+    }
+
+    private boolean isFullLine(int y) {
+        for (int x = 0; x < Config.WIDTH; x++) {
+            if (getBoxColor(x, y) != 2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int getBoxColor(int x, int y) {
+        return boxes[x][y].getColor();
+    }
+
+
     class KeyAdapter implements KeyListener {
         public void keyTyped(KeyEvent e) {
 
@@ -100,7 +135,7 @@ public class Window extends JFrame implements Runnable {
             hideFigure();
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
-                   movePlay(-1, 0);
+                    movePlay(-1, 0);
                     break;
                 case KeyEvent.VK_RIGHT:
                     movePlay(+1, 0);
@@ -113,7 +148,7 @@ public class Window extends JFrame implements Runnable {
                     break;
                 case KeyEvent.VK_SPACE:
                     play.turnFigure();
-              }
+            }
             showFigure(1);
         }
 
@@ -126,17 +161,16 @@ public class Window extends JFrame implements Runnable {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            play.moveFigure(0,1);
-            if (play.isLanded()){
-                play=new PlayFigure();
-                //for ()
-            play.setBoxes(boxes);
-               addFigure( play);
-               //showFigure(2);
-                for (int i=0;i< boxes.length;i++)
-                    for (int j=0;j< boxes[i].length;j++)
-                        if (boxes[i][j].getColor()!=0) boxes[i][j].setColor(2);
+            play.moveFigure(0, 1);
+            if (play.isLanded()) {
+                play = new PlayFigure();
+                play.setBoxes(boxes);
+                addFigure(play);
+                for (int i = 0; i < boxes.length; i++)
+                    for (int j = 0; j < boxes[i].length; j++)
+                        if (boxes[i][j].getColor() != 0) boxes[i][j].setColor(2);
             }
+            stripLines();
         }
     }
 
